@@ -211,6 +211,7 @@ private:
   bool useSymbols;
   bool useTemplate;
   QString passTemplate;
+  QString clippedSSHUrl;
   bool templateAllFields;
   bool autoPull;
   bool autoPush;

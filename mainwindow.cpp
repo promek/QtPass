@@ -831,7 +831,7 @@ void MainWindow::readyRead(bool finished = false) {
           pass->setEchoMode(QLineEdit::Password);
         pass->setReadOnly(true);
         ui->formLayout->addRow(pass);
-
+        clippedSSHUrl = "";
         for (int j = 0; j < tokens.length(); ++j) {
           QString token = tokens.at(j);
           if (token.contains(':')) {
@@ -845,6 +845,9 @@ void MainWindow::readyRead(bool finished = false) {
               line->setObjectName(field);
               line->setText(value);
               line->setReadOnly(true);
+              if (field == "login") {
+                clippedSSHUrl = value;
+              }
               ui->formLayout->addRow(new QLabel(field), line);
               tokens.removeAt(j);
               --j; // tokens.length() also got shortened by the remove..
@@ -1956,6 +1959,12 @@ void MainWindow::clearTemplateWidgets() {
  */
 void MainWindow::copyPasswordToClipboard() {
   if (clippedPass.length() > 0) {
+
+
+    if (clippedSSHUrl != "") {
+        executeWrapper("/usr/bin/konsole", "-e ssh "+clippedSSHUrl);
+    }
+
     QClipboard *clip = QApplication::clipboard();
     clip->setText(clippedPass);
     ui->statusBar->showMessage(tr("Password copied to clipboard"), 3000);
